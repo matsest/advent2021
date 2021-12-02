@@ -55,6 +55,31 @@ func part1(directions []string) int {
 	return Abs(x) * Abs(y)
 }
 
+func move2(x int, y int, direction string, lengthString string, aim int) (int, int, int) {
+	length, _ := strconv.Atoi(lengthString)
+	switch direction {
+	case "forward":
+		return (x + length), (y-(aim*length)), aim
+	case "up":
+		return x, y, (aim - length)
+	case "down":
+		return x, y, (aim + length)
+	default:
+		return x, y, aim
+	}
+}
+
+func part2(directions []string) int {
+	x, y, aim := 0, 0, 0
+	for _, line := range directions {
+		arr := strings.Split(line, " ")
+		direction, length := arr[0], arr[1]
+		x, y, aim = move2(x, y, direction, length, aim)
+	}
+
+	return Abs(x) * Abs(y)
+}
+
 func main() {
 	lines, _ := readLines("input.txt")
 
@@ -63,6 +88,6 @@ func main() {
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
-	//p2 := part2(numbers)
-	//fmt.Println("Part 2: ", p2)
+	p2 := part2(lines)
+	fmt.Println("Part 2: ", p2)
 }
