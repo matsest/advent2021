@@ -73,7 +73,7 @@ func part1(diagnostics []string) int64 {
 
 func rating(diagnostics []string, ratingType string, i int) int64 {
 
-	// Go through each line in first column
+	// Go through each line in i'th column
 	counter := map[int]int{0: 0, 1: 0}
 	var ones []string
 	var zeros []string
@@ -106,6 +106,7 @@ func rating(diagnostics []string, ratingType string, i int) int64 {
 	}
 
 	if len(newDiag) == 1 {
+		// Convert from Binary to Int
 		ans, _ := strconv.ParseInt(string(newDiag[0]), 2, 64)
 		return ans
 	}
