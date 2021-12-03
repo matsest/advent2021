@@ -71,6 +71,52 @@ func part1(diagnostics []string) int64 {
 	return gammaDec * epsilonDec
 }
 
+func rating(diagnostics []string, ratingType string, i int) int64 {
+
+	// Go through each line in first column
+	counter := map[int]int{0: 0, 1: 0}
+	var ones []string
+	var zeros []string
+	for _, line := range diagnostics {
+		current := string(line[i])
+		intVal, _ := strconv.Atoi(current)
+		counter[intVal] += 1
+		if current == "1" {
+			ones = append(ones, line)
+		} else {
+			zeros = append(zeros, line)
+		}
+	}
+
+	var newDiag []string
+	// oxy
+	if ratingType == "oxy" {
+		if len(zeros) > len(ones) {
+			newDiag = zeros
+		} else {
+			newDiag = ones
+		}
+	} else {
+		// co2
+		if len(zeros) > len(ones) {
+			newDiag = ones
+		} else {
+			newDiag = zeros
+		}
+	}
+
+	if len(newDiag) == 1 {
+		ans, _ := strconv.ParseInt(string(newDiag[0]), 2, 64)
+		return ans
+	}
+
+	return rating(newDiag, ratingType, i+1)
+}
+
+func part2(diagnostics []string) int64 {
+	return rating(diagnostics, "oxy", 0) * rating(diagnostics, "co2", 0)
+}
+
 func main() {
 	lines, _ := utils.ReadLines("input.txt")
 
@@ -79,6 +125,6 @@ func main() {
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
-	//p2 := part2(lines)
-	//fmt.Println("Part 2: ", p2)
+	p2 := part2(lines)
+	fmt.Println("Part 2: ", p2)
 }
