@@ -1,26 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
+
+	"github.com/matsest/advent2021/utils"
 )
-
-func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
-}
 
 func part1(numbers []int) int {
 	count := 0
@@ -53,7 +38,7 @@ func part2(numbers []int) int {
 }
 
 func main() {
-	lines, _ := readLines("input.txt")
+	lines, _ := utils.ReadLines("input.txt")
 
 	// Convert to ints
 	var numbers []int

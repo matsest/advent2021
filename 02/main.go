@@ -1,27 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
+
+	"github.com/matsest/advent2021/utils"
 )
-
-func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
-}
 
 func move(x int, y int, direction string, lengthString string) (int, int) {
 	length, _ := strconv.Atoi(lengthString)
@@ -81,7 +66,7 @@ func part2(directions []string) int {
 }
 
 func main() {
-	lines, _ := readLines("input.txt")
+	lines, _ := utils.ReadLines("input.txt")
 
 	// Part 1
 	p1 := part1(lines)
