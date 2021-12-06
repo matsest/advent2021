@@ -59,6 +59,7 @@ func parseBingo(bingo []string) (numbers []int, boards []Board) {
 }
 
 func checkBingo(board Board) (win bool, winningLine []BingoEntry) {
+	// check rows
 	for _, row := range board.numbers {
 		bingoLength := len(row)
 		markings := 0
@@ -67,10 +68,29 @@ func checkBingo(board Board) (win bool, winningLine []BingoEntry) {
 				markings += 1
 			}
 			if markings == bingoLength {
+				//fmt.Println("ROW WINNER")
 				return true, row
 			}
 		}
 	}
+	// check columns
+	for i, _ := range board.numbers[0] {
+		bingoLength := len(board.numbers[0])
+		markings := 0
+		resCol := []BingoEntry{}
+		for j, _ := range board.numbers {
+			if board.numbers[j][i].marked {
+				markings += 1
+				resCol = append(resCol, board.numbers[i][j])
+			}
+			//fmt.Println(resCol)
+			if markings == bingoLength {
+				//fmt.Println("COL WINNER")
+				return true, resCol
+			}
+		}
+	}
+
 	return false, nil
 }
 
@@ -97,6 +117,46 @@ func playBingo(numbers []int, boards []Board) (winningBoard Board, winningNumber
 					fmt.Println("Winning number", n)
 					return board, n
 				}
+			}
+		}
+	}
+
+	return Board{}, 0
+}
+
+func playBingo2(numbers []int, boards []Board) (winningBoard Board, winningNumber int) {
+	boardBingosMax := len(boards)
+	bingos := 0
+
+	for bingos < boardBingosMax {
+		for _, n := range numbers {
+			//fmt.Println("playing ", n)
+
+			for i, board := range boards {
+				for _, row := range board.numbers {
+					for i, v := range row {
+						if n == v.number {
+							row[i].marked = true
+						}
+					}
+				}
+				win, winningLine := checkBingo(board)
+				if win && !boards[i].bingo && bingos < boardBingosMax-1 {
+					boards[i].bingo = true
+					//fmt.Println("Setting board ", i, "to already won!")
+					bingos++
+					//fmt.Println("TJA We have false winner! Board ", i)
+					//fmt.Println("TJA Winning line", winningLine)
+					//fmt.Println("TJA Winning number", n)
+				} else if win && !boards[i].bingo && bingos == boardBingosMax-1 {
+					bingos++
+					boards[i].bingo = true
+					fmt.Println("We have winner! Board ", i)
+					fmt.Println("Winning line", winningLine)
+					fmt.Println("Winning number", n)
+					return board, n
+				}
+				//fmt.Println("BINGOS: ", bingos)
 			}
 		}
 	}
@@ -133,6 +193,35 @@ func part1(bingo []string) int {
 	return sum * winningNumber
 }
 
+func part2(bingo []string) int {
+	numbers, boards := parseBingo(bingo)
+
+	//fmt.Println("Playing with ", numbers)
+
+	winningBoard, winningNumber := playBingo2(numbers, boards)
+
+	sum := 0
+
+	for _, row := range winningBoard.numbers {
+		for _, n := range row {
+			if !n.marked {
+				sum += n.number
+			}
+		}
+	}
+
+	// debug
+	//for i, bs := range boards {
+	//	fmt.Println("Board ", i)
+	//	for _, r := range bs.numbers {
+	//		fmt.Println(r)
+	//	}
+	//}
+
+	return sum * winningNumber
+
+}
+
 func main() {
 	lines, _ := utils.ReadLines("input.txt")
 
@@ -141,6 +230,6 @@ func main() {
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
-	//p2 := part2(lines)
-	//fmt.Println("Part 2: ", p2)
+	p2 := part2(lines)
+	fmt.Println("Part 2: ", p2)
 }
