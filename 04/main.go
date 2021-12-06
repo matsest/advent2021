@@ -101,7 +101,7 @@ func playBingo(numbers []int, boards []Board) (winningBoard Board, winningNumber
 		for _, n := range numbers {
 			//fmt.Println("playing ", n)
 
-			for i, board := range boards {
+			for _, board := range boards {
 				for _, row := range board.numbers {
 					for i, v := range row {
 						if n == v.number {
@@ -109,12 +109,12 @@ func playBingo(numbers []int, boards []Board) (winningBoard Board, winningNumber
 						}
 					}
 				}
-				win, winningLine := checkBingo(board)
+				win, _ := checkBingo(board)
 				if win {
 					hasBingo = true
-					fmt.Println("We have winner! Board ", i)
-					fmt.Println("Winning line", winningLine)
-					fmt.Println("Winning number", n)
+					//fmt.Println("We have winner! Board ", i)
+					//fmt.Println("Winning line", winningLine)
+					//fmt.Println("Winning number", n)
 					return board, n
 				}
 			}
@@ -140,7 +140,7 @@ func playBingo2(numbers []int, boards []Board) (winningBoard Board, winningNumbe
 						}
 					}
 				}
-				win, winningLine := checkBingo(board)
+				win, _ := checkBingo(board)
 				if win && !boards[i].bingo && bingos < boardBingosMax-1 {
 					boards[i].bingo = true
 					//fmt.Println("Setting board ", i, "to already won!")
@@ -151,9 +151,9 @@ func playBingo2(numbers []int, boards []Board) (winningBoard Board, winningNumbe
 				} else if win && !boards[i].bingo && bingos == boardBingosMax-1 {
 					bingos++
 					boards[i].bingo = true
-					fmt.Println("We have winner! Board ", i)
-					fmt.Println("Winning line", winningLine)
-					fmt.Println("Winning number", n)
+					//fmt.Println("We have winner! Board ", i)
+					//fmt.Println("Winning line", winningLine)
+					//fmt.Println("Winning number", n)
 					return board, n
 				}
 				//fmt.Println("BINGOS: ", bingos)
