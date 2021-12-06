@@ -2,7 +2,10 @@ package utils
 
 import (
 	"bufio"
+	"io/ioutil"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func ReadLines(path string) ([]string, error) {
@@ -18,4 +21,24 @@ func ReadLines(path string) ([]string, error) {
 		lines = append(lines, scanner.Text())
 	}
 	return lines, scanner.Err()
+}
+
+func ReadInts(path string) ([]int, error) {
+	bytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	contents := string(bytes)
+	s := strings.Split(contents, ",")
+	var out []int
+
+	for v := range s {
+		i, err := strconv.Atoi(s[v])
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, i)
+	}
+
+	return out, nil
 }
