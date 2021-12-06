@@ -7,7 +7,7 @@ import (
 	"github.com/matsest/advent2021/utils"
 )
 
-func GammaEntry(m map[int]int) (ans string) {
+func rating1(m map[int]int, ratingType string) (ans string) {
 	keys := make([]int, 0, len(m))
 	values := make([]int, 0, len(m))
 
@@ -16,28 +16,22 @@ func GammaEntry(m map[int]int) (ans string) {
 		values = append(values, v)
 	}
 
-	if values[0] > values[1] {
-		ans = strconv.Itoa(keys[0])
+	// gamma
+	if ratingType == "gamma" {
+		if values[0] > values[1] {
+			ans = strconv.Itoa(keys[0])
+		} else {
+			ans = strconv.Itoa(keys[1])
+		}
 	} else {
-		ans = strconv.Itoa(keys[1])
-	}
-	return ans
-}
-
-func EpsilonEntry(m map[int]int) (ans string) {
-	keys := make([]int, 0, len(m))
-	values := make([]int, 0, len(m))
-
-	for k, v := range m {
-		keys = append(keys, k)
-		values = append(values, v)
+		// epsilon
+		if values[0] > values[1] {
+			ans = strconv.Itoa(keys[1])
+		} else {
+			ans = strconv.Itoa(keys[0])
+		}
 	}
 
-	if values[0] > values[1] {
-		ans = strconv.Itoa(keys[1])
-	} else {
-		ans = strconv.Itoa(keys[0])
-	}
 	return ans
 }
 
@@ -60,8 +54,8 @@ func part1(diagnostics []string) int64 {
 		}
 
 		// Find the current entry
-		gamma += GammaEntry(counter)
-		epsilon += EpsilonEntry(counter)
+		gamma += rating1(counter, "gamma")
+		epsilon += rating1(counter, "epsilon")
 	}
 
 	// Convert from Binary to Int
@@ -71,7 +65,7 @@ func part1(diagnostics []string) int64 {
 	return gammaDec * epsilonDec
 }
 
-func rating(diagnostics []string, ratingType string, i int) int64 {
+func rating2(diagnostics []string, ratingType string, i int) int64 {
 
 	// Go through each line in i'th column
 	counter := map[int]int{0: 0, 1: 0}
@@ -111,11 +105,11 @@ func rating(diagnostics []string, ratingType string, i int) int64 {
 		return ans
 	}
 
-	return rating(newDiag, ratingType, i+1)
+	return rating2(newDiag, ratingType, i+1)
 }
 
 func part2(diagnostics []string) int64 {
-	return rating(diagnostics, "oxy", 0) * rating(diagnostics, "co2", 0)
+	return rating2(diagnostics, "oxy", 0) * rating2(diagnostics, "co2", 0)
 }
 
 func main() {
