@@ -74,14 +74,68 @@ func findMinAndMax(a []int) (min int, max int) {
 	return min, max
 }
 
+func part2(lines []string, length int) int {
+
+	// Initialize polymer
+	seed := strings.Split(string(lines[0]), "")
+
+	// Initialize pairs
+	pairs := make(map[string]int)
+	for i := 0; i < len(seed)-1; i++ {
+		pairs[seed[i]+seed[i+1]] += 1
+	}
+
+	// Create map of pairInsertions
+	pairInsertions := make(map[string]string)
+	for i := 2; i < len(lines); i++ {
+		parts := strings.Split(lines[i], " -> ")
+		pairInsertions[parts[0]] = parts[1]
+	}
+
+	// Create a map of letter counts
+	letterCount := make(map[string]int)
+	for _, v := range seed {
+		letterCount[v]+=1
+	}
+
+	// Grow polymers using map of pairs
+	for j := 0; j < length; j++ {
+		newPairs := make(map[string]int)
+		for k, v := range pairs {
+			new := pairInsertions[k]
+			if v > 0 {
+				//fmt.Println(string(k), " -> ", new)
+				newPairs[k] -= v
+				newPairs[string(k[0])+new] += v
+				newPairs[new+string(k[1])] += v
+				letterCount[new] += v
+			}
+		}
+
+		for k, v := range newPairs {
+				pairs[k] += v
+		}
+	}
+
+	// Create array of ints from counts
+	numbers := make([]int, 0, len(letterCount))
+	for _, v := range letterCount {
+		numbers = append(numbers, v)
+	}
+
+	min, max := findMinAndMax(numbers)
+
+	return max-min
+}
+
 func main() {
-	lines, _ := utils.ReadLines("test.txt")
+	lines, _ := utils.ReadLines("input.txt")
 
 	// Part 1
 	p1 := part1(lines, 10)
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
-	p2 := part1(lines, 10)
+	p2 := part2(lines, 40)
 	fmt.Println("Part 2: ", p2)
 }
