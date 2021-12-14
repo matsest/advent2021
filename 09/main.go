@@ -8,7 +8,7 @@ import (
 )
 
 type Entry struct {
-	this       int
+	this       int // value
 	over       int
 	under      int
 	left       int
@@ -39,33 +39,22 @@ func part1(numbers [][]int) int {
 			// set neighbours to 10 by default have a simple check
 			test := Entry{numbers[i][j], 10, 10, 10, 10, false}
 
-			// top line, no top neighour
-			if i == 0 {
-				test.under = numbers[i+1][j]
-			  // in between
-			} else if i < len(numbers)-1 {
-				test.over = numbers[i-1][j]
-				test.under = numbers[i+1][j]
-			  // last line
-			} else if i == len(numbers)-1 {
+			if i > 0 {
 				test.over = numbers[i-1][j]
 			}
+			if i < len(numbers)-1 {
+				test.under = numbers[i+1][j]
+			}
 
-			// first column - only right
-			if j == 0 {
-				test.right = numbers[i][j+1]
-			  // in between
-			} else if j < len(row)-1 {
+			if j > 0 {
 				test.left = numbers[i][j-1]
+			}
+			if j < len(row)-1 {
 				test.right = numbers[i][j+1]
-			  // last column
-			} else if j == len(row)-1 {
-				test.left = numbers[i][j-1]
 			}
 
 			test.SetLowPoint()
 			if test.isLowPoint {
-				//fmt.Println(test)
 				riskLevelSum += (test.this + 1)
 			}
 		}
@@ -90,6 +79,6 @@ func main() {
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
-	//p2 := part2(lines)
+	//p2 := part2(numbers)
 	//fmt.Println("Part 2: ", p2)
 }
