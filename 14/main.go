@@ -104,7 +104,6 @@ func part2(lines []string, length int) int {
 		for k, v := range pairs {
 			new := pairInsertions[k]
 			if v > 0 {
-				//fmt.Println(string(k), " -> ", new)
 				newPairs[k] -= v
 				newPairs[string(k[0])+new] += v
 				newPairs[new+string(k[1])] += v
