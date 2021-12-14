@@ -28,30 +28,33 @@ func readNumber(s string) int {
 	return 0
 }
 
-func part1(digits []string) int {
+func part1(entries []string) int {
 	count := 0
-	for _, d := range digits {
-		if readNumber(d) != 0 {
-			count += 1
+
+	for _, e := range entries {
+		digits := strings.Split(e, " ")
+		for _, d := range digits {
+			if readNumber(d) != 0 {
+				count += 1
+			}
 		}
 	}
 	return count
 }
 
 func main() {
-	lines, _ := utils.ReadLines("input.txt")
+	lines, _ := utils.ReadLines("test.txt")
 
 	// Parse input
-	var outputvalues []string
+	var outputvalueentries []string
 	for _, v := range lines {
 		parts := strings.Split(v, " | ")
-		digits := strings.Split(parts[1], " ")
-		outputvalues = append(outputvalues, digits...)
+		outputvalueentries = append(outputvalueentries, parts[1])
 	}
 	//fmt.Println(outputvalues)
 
 	// Part 1
-	p1 := part1(outputvalues)
+	p1 := part1(outputvalueentries)
 	fmt.Println("Part 1: ", p1)
 
 	// Part 2
